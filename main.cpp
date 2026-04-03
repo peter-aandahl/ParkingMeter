@@ -26,7 +26,9 @@ ThreeWire myWire(RTC_DAT, RTC_CLK, RTC_RST);
 RtcDS1302<ThreeWire> Rtc(myWire);
 
 // Configure E-Ink Driver for 1.54" 200x200 B/W
-GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display(GxEPD2_154_D67(/*CS=*/ EPD_CS, /*DC=*/ EPD_DC, /*RST=*/ EPD_RST, /*BUSY=*/ EPD_BUSY));
+// Arduino Nano only has 2KB of RAM, so we must limit the page height (e.g. to 32)
+// to use paged drawing rather than trying to allocate a 5KB full-screen buffer.
+GxEPD2_BW<GxEPD2_154_D67, 32> display(GxEPD2_154_D67(/*CS=*/ EPD_CS, /*DC=*/ EPD_DC, /*RST=*/ EPD_RST, /*BUSY=*/ EPD_BUSY));
 
 // --- Constants ---
 const unsigned long DRIVE_TIMEOUT = 120000; // 120 seconds in milliseconds without vibration means "Parked"
