@@ -1,74 +1,22 @@
-This is my chat with Gemini about the project:
+# Smart Parking Disk 
 
+This is the firmware for a smart parking disk based on the Arduino Nano. 
 
-Switching to an Arduino (like an Arduino Nano or Uno) is actually a brilliant move for this specific project. While the Raspberry Pi is a tiny computer, the Arduino is a microcontroller—it’s much better at "low-power" tasks and won't risk corrupting an SD card if the battery dies.
+## Features Implemented
+1. **Deep Sleep State Machine:** Uses the Rocket Scream `LowPower` library. The Arduino spends 99% of its life in an ultra-low power state, consuming almost 0mA.
+2. **Interrupt Wake-ups:** The `SW-420` vibration module is tied to `D2`, pulling it HIGH when the car is shaking (driving), which guarantees instant wake-up.
+3. **Swedish Rounding Rules:** The parking time calculates to the exact minute, and seamlessly rounds UP to the next full half-hour mark (e.g., `14:18` rounds to `14:30`, and `14:32` rounds to `15:00`). 
+4. **E-Ink Display System:** The code has been specifically targeted at the `1.54" 200x200 B/W SPI E-ink` display, using `GxEPD2` along with `Adafruit_GFX` to render large customized fonts perfectly in the center inside an elegant layout.
 
-Here is how the project changes:
+## Next Steps for Setup
 
-1. Why Arduino is better here
-Instant On: The moment it gets power, the code runs. No 30-second boot time.
+1. Start a new project in your Arduino IDE or PlatformIO.
+2. Find and install the following libraries inside the Library Manager:
+   - `LowPower` by Rocket Scream
+   - `RTC` by Makuna (for DS1302)
+   - `GxEPD2` by Jean-Marc Zingg
+   - `Adafruit GFX Library` by Adafruit
+3. Paste the code into your `main.cpp` / `.ino` file and compile/upload to the Arduino Nano.
 
-Power Consumption: An Arduino Nano uses a fraction of the power of a Pi Zero. Your power bank will last weeks instead of days.
-
-True Sleep Mode: You can put the Arduino into a "Deep Sleep" where it consumes almost zero battery, waking up only when the vibration sensor "ticks."
-
-Voltage Tolerance: Arduinos are generally more robust than Pis when it comes to power fluctuations.
-
-2. Revised Wiring (Arduino Nano Example)
-The wiring is actually simpler because Arduinos use 5V logic, which matches the vibration sensor perfectly.
-
-Component	Pin on Component	Pin on Arduino	Note
-Vibration Sensor	VCC	5V	Power
-GND	GND	Ground
-DO (Digital Out)	D2	D2 supports "Interrupts" (Wakes the CPU)
-RTC (DS1302)	VCC	5V or 3.3V	Check your specific module
-GND	GND	
-CLK / DAT / RST	D6, D7, D8	These can be any digital pins
-E-Ink Display	SPI Pins	D10, D11, D13	E-ink uses the SPI bus
-3. The "Power Saving" Logic
-Since you want this to run on a battery, we can use a "Sleep" strategy that isn't possible on a Pi:
-
-The Driving State: The Arduino is awake, reading the time from the RTC every second and updating the screen (or just a small LED).
-
-The Timer: Every time the vibration sensor triggers, a "countdown" resets to 5 minutes.
-
-The Parked Event: If the countdown reaches zero (no vibration for 5 mins), the Arduino:
-
-Grabs the current time from the RTC.
-
-Calculates the "Rounded Down" half-hour.
-
-Updates the E-Ink display one last time.
-
-Goes to Sleep: It shuts down its brain. Because E-Ink doesn't need power to hold an image, the parking time stays visible forever.
-
-The Wake Up: The vibration sensor is connected to an Interrupt Pin. The first "shake" of the car engine waking up sends a signal that "shocks" the Arduino back to life instantly.
-
-4. Updated Hardware List
-If you go the Arduino route, your shopping list from Electrokit would be:
-
-Arduino Nano (or a clone).
-
-The SW-420 Vibration Sensor (Same one as before).
-
-The DS1302 RTC (Same one as before).
-
-E-Ink Display: Make sure it is "Arduino Compatible" (uses SPI).
-
-A "Dumb" Power Bank: As mentioned before, you need one that doesn't shut off when current is low, or you can use a 3xAA battery pack which will last a very long time in sleep mode.
-
-5. Let's look at the "Rounding" Logic
-Since we are switching to C++ (Arduino) from Python (Pi), the math for your "round down to nearest 30 mins" looks like this:
-
-C++
-// Example: if it's 21:18
-int hours = 21;
-int minutes = 18;
-
-if (minutes >= 30) {
-    minutes = 30;
-} else {
-    minutes = 0;
-}
-// Result: 21:00
-Does the Arduino route feel more "correct" for your needs? If so, would you like me to help you write the first version of the C++ code to handle the vibration detection?
+> [!TIP]
+> The first time you power up the RTC module, it will likely not know the time! You can uncomment `Rtc.SetDateTime(RtcDateTime(__DATE__, __TIME__));` inside the `setup()` function, flash the code once to burn the current time to the RTC chip, and then comment it out and flash again for regular use.
