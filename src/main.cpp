@@ -135,11 +135,11 @@ void putToSleep() {
   Serial.flush(); // Give serial time to finish printing
 
   // Ensure E-ink is totally powered down to prevent damage and use 0mA
-  display.powerDown(); 
+  display.powerOff(); 
 
   // ESP32 Native Deep Sleep Wakeup Source
   // Configure the RTC controller to wake the processor up when the vibration pin goes HIGH (1)
-  esp_sleep_enable_ext0_wakeup((gpio_num_t)VIBRATION_PIN, 1);
+  esp_deep_sleep_enable_gpio_wakeup(1 << VIBRATION_PIN, ESP_GPIO_WAKEUP_GPIO_HIGH);
   
   // ** SLEEP MODE ACTIVATED **
   // The CPU completely powers off. RAM is cleared. 
