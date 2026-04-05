@@ -1,0 +1,126 @@
+ESP32-C3 Power and Wiring Guide
+================================
+
+Recommended Power Setup
+-----------------------
+Use a 3×AAA battery pack with a proper regulator. Do not connect the battery pack directly to the ESP32 3V3 pin.
+
+- Battery pack + -> regulator VIN
+- Battery pack - -> regulator GND
+- Regulator 3.3V -> ESP32 3V3
+- Regulator GND -> ESP32 GND
+
+Use a regulator rated for at least 500 mA, preferably 1 A, for stable operation.
+
+Important Notes
+---------------
+- 3×AAA alkaline = about 4.5V fresh, which is too high for the ESP32 3.3V rail.
+- The ESP32 board must be powered from a regulated 3.3V source or a proper 5V input if the board supports it.
+- Do not plug USB into the board while powering it externally through the 3V3 pin, unless the board has explicit power-selection circuitry.
+- Tie all grounds together between battery/regulator, ESP32, e-ink display, RTC, and vibration sensor.
+
+Component Compatibility
+-----------------------
+ESP32-C3 board
+- Works fine at 3.3V.
+- Use the 3V3 pin only if the regulator output is stable and clean.
+
+E-Ink display
+- Most GxEPD2 SPI e-ink modules are 3.3V logic compatible.
+- Power the display from the same 3.3V rail.
+- Verify the display module is designed for 3.3V.
+
+DS1302 RTC
+- DS1302 works at 3.3V.
+- If the module has a regulator, ensure it is configured for 3.3V input or bypass it and power the RTC chip directly at 3.3V.
+
+Vibration sensor
+- Standard SW-420 modules run on 3.3V.
+- Power it from the same regulated 3.3V rail.
+
+Exact Wiring Diagram
+--------------------
+Power
+- AAA pack (+) -> Regulator VIN
+- AAA pack (-) -> Regulator GND
+- Regulator 3.3V -> ESP32 3V3
+- Regulator GND -> ESP32 GND
+
+ESP32-C3 DevKitM-1 Connections
+Common rails
+- ESP32 3V3 -> E-Ink VCC
+- ESP32 3V3 -> RTC VCC
+- ESP32 3V3 -> Vibration VCC
+- ESP32 GND -> E-Ink GND
+- ESP32 GND -> RTC GND
+- ESP32 GND -> Vibration GND
+
+E-Ink display (SPI)
+- ESP32 GPIO11 -> CS
+- ESP32 GPIO3 -> DC
+- ESP32 GPIO4 -> RST
+- ESP32 GPIO5 -> BUSY
+- ESP32 GPIO7 -> MOSI / DIN
+- ESP32 GPIO6 -> SCK / CLK
+- Display VCC -> ESP32 3V3
+- Display GND -> ESP32 GND
+
+DS1302 RTC
+- ESP32 GPIO0 -> DAT
+- ESP32 GPIO1 -> CLK
+- ESP32 GPIO8 -> RST
+- RTC VCC -> ESP32 3V3
+- RTC GND -> ESP32 GND
+
+Vibration sensor (SW-420)
+- ESP32 GPIO2 -> OUT
+- Sensor VCC -> ESP32 3V3
+- Sensor GND -> ESP32 GND
+
+Connector-level summary
+----------------------
+ESP32 3V3 -> E-Ink VCC, RTC VCC, Vibration VCC
+ESP32 GND -> E-Ink GND, RTC GND, Vibration GND
+GPIO11 -> E-Ink CS
+GPIO3 -> E-Ink DC
+GPIO4 -> E-Ink RST
+GPIO5 -> E-Ink BUSY
+GPIO7 -> E-Ink MOSI/DIN
+GPIO6 -> E-Ink SCK/CLK
+GPIO0 -> RTC DAT
+GPIO1 -> RTC CLK
+GPIO8 -> RTC RST
+GPIO2 -> Vibration OUT
+
+Display module label mapping
+----------------------------
+If the e-ink module uses common connector labels:
+- VCC -> ESP32 3V3
+- GND -> ESP32 GND
+- DIN/MOSI -> ESP32 GPIO7
+- CLK/SCK -> ESP32 GPIO6
+- CS -> ESP32 GPIO11
+- DC -> ESP32 GPIO3
+- RST -> ESP32 GPIO4
+- BUSY -> ESP32 GPIO5
+
+RTC module label mapping
+------------------------
+- VCC -> ESP32 3V3
+- GND -> ESP32 GND
+- DAT -> ESP32 GPIO0
+- CLK -> ESP32 GPIO1
+- RST/CE -> ESP32 GPIO8
+
+Vibration sensor label mapping
+------------------------------
+- VCC -> ESP32 3V3
+- GND -> ESP32 GND
+- OUT -> ESP32 GPIO2
+
+Final advice
+------------
+- Use a good regulator module, not a raw battery pack.
+- Do not feed the ESP32 3.3V rail with 4.5V directly.
+- If the display or RTC has a 5V input option, verify it before using it.
+- Common ground is required for all components.

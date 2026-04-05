@@ -1,0 +1,49 @@
+ESP32-C3 Smart Parking Meter Parts List
+======================================
+
+Core Electronics
+----------------
+- 1 × ESP32-C3 Utvecklingskort 4MB Lipo
+  - Electrokit item ID: 41020799
+  - URL: https://www.electrokit.com/esp32-c3-utvecklingskort-med-lipo-laddare
+- 1 × 1.54" E-papper display 200x200px svart/vit monterad på kort SPI
+  - Electrokit item ID: 41022488
+  - URL: https://www.electrokit.com/1.54e-papper-display-200x200px-svart/vit-monterad-pa-kort-spi
+- 1 × Realtidsklocka RTC SPI DS1302
+  - Electrokit item ID: 41032906
+  - URL: https://www.electrokit.com/realtidsklocka-rtc-spi-ds1302
+- 1 × Vibrationssensor
+  - Electrokit item ID: 41015724
+  - URL: https://www.electrokit.com/vibrationssensor
+
+Power
+-----
+- 3 × AAA batteries
+- 1 × DCDC-omvandlare 3.3V 3A
+  - Electrokit item ID: 41020798
+  - URL: https://www.electrokit.com/dcdc-omvandlare-3.3v-3a
+- 1 × Batterihållare 3x AAA kabelanslutning
+  - Electrokit item ID: 41017852
+  - URL: https://www.electrokit.com/batterihallare-3xaaa-kabel
+
+Connectors & Wiring
+-------------------
+- 1 × 8-pin female dupont cable / connector set for E-Ink display
+- 1 × small 3-pin wire set for RTC module
+- 1 × small 3-pin wire set for vibration sensor module
+- 1 × set of jumper wires / solderless breadboard wires
+- 1 × common ground wire(s)
+
+Optional Parts
+--------------
+- 1 × small perfboard or prototype PCB for assembly
+- 1 × enclosure or case for the meter electronics
+- 1 × pushbutton or tactile switch if you want a manual reset/test input
+- Heat shrink tubing or electrical tape for insulation
+
+Notes
+-----
+- The ESP32-C3 board should be powered from a stable 3.3V supply or from a 5V input pin if the board supports it.
+- Verify the E-Ink display module is 3.3V compatible and uses SPI signals compatible with GxEPD2.
+- Ensure the RTC module is configured for 3.3V operation or bypass its regulator.
+- All component grounds should be tied together.
