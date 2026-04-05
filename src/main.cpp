@@ -10,13 +10,13 @@
 #include <Fonts/FreeSansBold24pt7b.h>
 #include <Fonts/FreeSansBold12pt7b.h>
 
-// --- Pins Definition (ESP32-C3 Zero) ---
+// --- Pins Definition (ESP32-C3 DevKitM-1) ---
 const int VIBRATION_PIN = 2; // HW Wakeup RTC GPIO
 const int RTC_CLK = 1;
 const int RTC_DAT = 0;
 const int RTC_RST = 8;
 
-const int EPD_CS = 10;
+const int EPD_CS = 11; // SPI CS pin for the E-Ink display
 const int EPD_DC = 3;
 const int EPD_RST = 4;
 const int EPD_BUSY = 5;
